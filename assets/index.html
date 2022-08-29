@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--Set visual viewport size for mobile devices to the device size,
+        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
+        and Qt device independent pixels. -->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+
+    <title>qt-wasm-input-method</title>
+    <style>
+        /* Make the html body cover the entire (visual) viewport with no scroll bars. */
+        html, body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            height: 100%
+        }
+
+        /* Make the canvas cover the entire body */
+        canvas {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body onload="init()">
+<figure style="overflow:visible;" id="qtspinner">
+    <center style="margin-top:1.5em; line-height:150%">
+        <img src="qtlogo.svg" width="320" height="200" style="display:block"></img>
+        <strong>Qt for WebAssembly: qt-wasm-input-method</strong>
+        <div id="qtstatus"></div>
+        <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
+    </center>
+</figure>
+<div>
+    <input id="input"/>
+    <button id="button">Click</button>
+
+    <div class="control">
+        <label for="name">On macOS, click in the textbox below,<br> then type <kbd>option</kbd> + <kbd>`</kbd>, then
+            <kbd>a</kbd>:</label>
+        <input type="text" id="example" name="example">
+    </div>
+
+    <div class="event-log">
+        <label>Event log:</label>
+        <textarea readonly class="event-log-contents" rows="8" cols="25"></textarea>
+        <button class="clear-log">Clear</button>
+    </div>
+</div>
+<canvas id="qtcanvas"></canvas>
+
+<script type='text/javascript'>
+    let qtLoader = undefined;
+
+    window.Module = {};
+
+    Module['onRuntimeInitialized'] = () => {
+        console.log('lerp result: ' + Module.lerp(1, 2, 0.5));
+    }
+    Module.locateFile = function (path, prefix) {
+        console.log('locateFile222', path, prefix)
+        return prefix + path
+    }
+    function init() {
+        var spinner = document.querySelector('#qtspinner');
+        var canvas = document.querySelector('#qtcanvas');
+        var status = document.querySelector('#qtstatus')
+        qtLoader = QtLoader({
+            canvasElements: [canvas],
+            showLoader: function (loaderStatus) {
+                spinner.style.display = 'block';
+                canvas.style.display = 'none';
+                status.innerHTML = loaderStatus + "...";
+            },
+            showError: function (errorText) {
+                status.innerHTML = errorText;
+                spinner.style.display = 'block';
+                canvas.style.display = 'none';
+            },
+            showExit: function () {
+                status.innerHTML = "Application exit";
+                if (qtLoader.exitCode !== undefined)
+                    status.innerHTML += " with code " + qtLoader.exitCode;
+                if (qtLoader.exitText !== undefined)
+                    status.innerHTML += " (" + qtLoader.exitText + ")";
+                spinner.style.display = 'block';
+                canvas.style.display = 'none';
+            },
+            showCanvas: function () {
+                spinner.style.display = 'none';
+                canvas.style.display = 'block';
+            },
+        });
+        qtLoader.loadEmscriptenModule("qt-wasm-input-method");
+    }
+
+</script>
+<script type="text/javascript" src="/cmake-build-webassembly/qtloader.js"></script>
+<script type="text/javascript" src="/assets/scripts/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="/assets/scripts/index.js"></script>
+</body>
+</html>
