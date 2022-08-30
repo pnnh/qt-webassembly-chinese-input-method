@@ -29,6 +29,10 @@ public:
 
     void setCompositionText(QString compositionEvent, QString text);
 
+    void deleteContent();
+
+    void insertLineBreak();
+
 private:
     QString text;
     QString compositionText;

@@ -19,7 +19,7 @@ Window {
     }
     TextBalloon {
             anchors.right: parent.right
-            height: 320
+            height: 620
             text: "hello, 世界！"
             width: 620
         }

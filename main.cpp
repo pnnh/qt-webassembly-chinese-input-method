@@ -48,11 +48,31 @@ emscripten::val callAppendText(const std::string &data) {
     return emscripten::val(str);
 }
 
+emscripten::val deleteContent() {
+    std::cout << "deleteContent" << std::endl;
+
+    TextBalloon::defaultBalloon->deleteContent();
+
+    std::string str = "ok";
+    return emscripten::val(str);
+}
+
+emscripten::val insertLineBreak() {
+    std::cout << "insertLineBreak" << std::endl;
+
+    TextBalloon::defaultBalloon->insertLineBreak();
+
+    std::string str = "ok";
+    return emscripten::val(str);
+}
+
 EMSCRIPTEN_BINDINGS(demo) {
     emscripten::function("tryCharPtr", &tryCharPtr);
     emscripten::function("tryStdString", &tryStdString);
     emscripten::function("callCompositionText", &callCompositionText);
     emscripten::function("callAppendText", &callAppendText);
+    emscripten::function("deleteContent", &deleteContent);
+    emscripten::function("insertLineBreak", &insertLineBreak);
 }
 
 int main(int argc, char *argv[]) {
