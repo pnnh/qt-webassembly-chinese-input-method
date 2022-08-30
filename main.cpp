@@ -5,14 +5,7 @@
 #include <QFile>
 #include <string>
 #include <iostream>
-
-using namespace std;
-
-float compareBig(int a, int b) {
-    return a > b ? a : b;
-}
-
-#ifdef __EMSCRIPTEN__
+#include "TextBalloon.h"
 
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
@@ -36,6 +29,10 @@ emscripten::val tryStdString() {
 
 emscripten::val callComposition(const std::string &type, const std::string &data) {
     std::cout << "=====" << type << "|" << data << "====" << std::endl;
+
+    QString text = QString::fromStdString(data);
+    TextBalloon::defaultBalloon->setText(text);
+
     std::string str = "ok";
     return emscripten::val(str);
 }
@@ -45,27 +42,6 @@ EMSCRIPTEN_BINDINGS(demo) {
     emscripten::function("tryStdString", &tryStdString);
     emscripten::function("callComposition", &callComposition);
 }
-
-extern "C" {
-
-EMSCRIPTEN_KEEPALIVE int myFunction() {
-    printf("我的函数已被调用\n");
-    return 0;
-}
-
-EMSCRIPTEN_KEEPALIVE int set_data_demo(char *data, int len) {
-    printf("我的函数已被调用2\n");
-    //auto str = QString::fromUtf8(data, len);
-    string str = data;
-    //qInfo() << "received:" << str;
-    //QByteArray ba = str.toLocal8Bit();
-    const char *c_str2 = str.c_str();
-    printf("str2: %s", c_str2);
-    return strlen(data);
-}
-
-}
-#endif
 
 
 int main(int argc, char *argv[]) {

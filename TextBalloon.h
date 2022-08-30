@@ -11,18 +11,22 @@
 
 class TextBalloon : public QQuickPaintedItem {
 Q_OBJECT
-    Q_PROPERTY(bool rightAligned WRITE setRightAligned)
+    Q_PROPERTY(QString text WRITE setText)
     QML_ELEMENT
 
 public:
+    static std::shared_ptr<TextBalloon> defaultBalloon;
+
     TextBalloon(QQuickItem *parent = nullptr);
+
+    ~TextBalloon();
 
     void paint(QPainter *painter) override;
 
-    void setRightAligned(bool rightAligned);
+    void setText(QString text);
 
 private:
-    bool rightAligned;
+    QString text;
 };
 
 #endif //QT_WASM_INPUT_METHOD_TEXTBALLOON_H

@@ -19,9 +19,9 @@ Window {
     }
     TextBalloon {
             anchors.right: parent.right
-            height: 60
-            rightAligned: true
-            width: 120
+            height: 220
+            text: "hello, 世界！"
+            width: 220
         }
 }
 
