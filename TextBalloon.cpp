@@ -36,11 +36,32 @@ void TextBalloon::paint(QPainter *painter) {
             QPointF(30.0, itemSize.height() - 10.0),
     };
     painter->drawConvexPolygon(points, 3);
-    painter->drawText(20, 20, this->text);
+    QString fullText = this->text + this->compositionText;
+    painter->drawText(20, 20, fullText);
 }
 
 void TextBalloon::setText(QString text) {
     qDebug() << "setText: " << text;
     this->text = text;
+    this->update();
+}
+
+void TextBalloon::appendText(QString text) {
+    qDebug() << "appendText: " << text;
+    this->text = this->text + text;
+    this->update();
+}
+
+void TextBalloon::setCompositionText(QString compositionEvent, QString text) {
+    qDebug() << "setCompositionText: " << text;
+    if (compositionEvent == "compositionstart")
+        this->compositionText = "";
+    else if (compositionEvent == "compositionupdate")
+        this->compositionText = text;
+    else if (compositionEvent == "compositionend") {
+        this->compositionText = "";
+        this->text = this->text + text;
+    } else
+        this->compositionText = "";
     this->update();
 }

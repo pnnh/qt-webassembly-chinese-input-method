@@ -42,7 +42,7 @@
     <div class="control">
         <label for="name">On macOS, click in the textbox below,<br> then type <kbd>option</kbd> + <kbd>`</kbd>, then
             <kbd>a</kbd>:</label>
-        <input type="text" id="example" style="width: 600px" name="example">
+        <textarea id="example" rows="8" cols="25"></textarea>
     </div>
 
     <div class="event-log">
@@ -56,24 +56,25 @@
 
 <script type='text/javascript'>
     let qtLoader = undefined;
+
     function init() {
         var spinner = document.querySelector('#qtspinner');
         var canvas = document.querySelector('#qtcanvas');
         var status = document.querySelector('#qtstatus')
 
         qtLoader = QtLoader({
-            canvasElements : [canvas],
-            showLoader: function(loaderStatus) {
+            canvasElements: [canvas],
+            showLoader: function (loaderStatus) {
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
                 status.innerHTML = loaderStatus + "...";
             },
-            showError: function(errorText) {
+            showError: function (errorText) {
                 status.innerHTML = errorText;
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
             },
-            showExit: function() {
+            showExit: function () {
                 status.innerHTML = "Application exit";
                 if (qtLoader.exitCode !== undefined)
                     status.innerHTML += " with code " + qtLoader.exitCode;
@@ -82,7 +83,7 @@
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
             },
-            showCanvas: function() {
+            showCanvas: function () {
                 spinner.style.display = 'none';
                 canvas.style.display = 'block';
             },

@@ -25,8 +25,13 @@ public:
 
     void setText(QString text);
 
+    void appendText(QString text);
+
+    void setCompositionText(QString compositionEvent, QString text);
+
 private:
     QString text;
+    QString compositionText;
 };
 
 #endif //QT_WASM_INPUT_METHOD_TEXTBALLOON_H

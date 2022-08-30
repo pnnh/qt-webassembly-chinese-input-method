@@ -27,11 +27,22 @@ emscripten::val tryStdString() {
     return emscripten::val(str);
 }
 
-emscripten::val callComposition(const std::string &type, const std::string &data) {
-    std::cout << "=====" << type << "|" << data << "====" << std::endl;
+emscripten::val callCompositionText(const std::string &type, const std::string &data) {
+    std::cout << "callCompositionText:=====" << type << "|" << data << "====" << std::endl;
+
+    QString compositionEvent = QString::fromStdString(type);
+    QString text = QString::fromStdString(data);
+    TextBalloon::defaultBalloon->setCompositionText(compositionEvent, text);
+
+    std::string str = "ok";
+    return emscripten::val(str);
+}
+
+emscripten::val callAppendText(const std::string &data) {
+    std::cout << "callAppendText:=====" << data << "====" << std::endl;
 
     QString text = QString::fromStdString(data);
-    TextBalloon::defaultBalloon->setText(text);
+    TextBalloon::defaultBalloon->appendText(text);
 
     std::string str = "ok";
     return emscripten::val(str);
@@ -40,9 +51,9 @@ emscripten::val callComposition(const std::string &type, const std::string &data
 EMSCRIPTEN_BINDINGS(demo) {
     emscripten::function("tryCharPtr", &tryCharPtr);
     emscripten::function("tryStdString", &tryStdString);
-    emscripten::function("callComposition", &callComposition);
+    emscripten::function("callCompositionText", &callCompositionText);
+    emscripten::function("callAppendText", &callAppendText);
 }
-
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
