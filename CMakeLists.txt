@@ -20,7 +20,9 @@ endif (CCACHE)
 
 find_package(Qt6 COMPONENTS Core Gui Quick QuickLayouts QuickControls2 REQUIRED)
 
-qt_add_executable(myapp main.cpp)
+qt_add_executable(myapp
+        main.cpp
+        wasm.h wasm.cpp)
 
 target_link_libraries(myapp
         PRIVATE Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2)
@@ -41,7 +43,6 @@ qt6_add_qml_module(myapp
         VERSION 1.0
         SOURCES
         TextBalloon.h TextBalloon.cpp
-        #mytype.h mytype.cc
         QML_FILES
         main.qml
         RESOURCES

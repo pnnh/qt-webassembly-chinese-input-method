@@ -36,3 +36,13 @@ function handleInput(event) {
 }
 
 inputElement.addEventListener('input', handleInput);
+
+window.showTextArea = function (px, py) {
+    console.debug('showTextArea: ', px, py)
+    inputElement.style.left = String(px) + 'px';
+    inputElement.style.top = String(py) + 'px';
+    inputElement.style.display = 'block';
+    setTimeout(function () {
+        inputElement.focus();
+    }, 0);
+}

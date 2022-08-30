@@ -24,6 +24,20 @@
             height: 100%;
             width: 100%;
         }
+
+        #example {
+            height: 1px;
+            width: 1px;
+            display: none;
+            position: fixed;
+            border: none;
+            outline: none;
+            caret-color: transparent;
+            background: transparent;
+            color: transparent;
+            overflow: hidden;
+            resize: none;
+        }
     </style>
 </head>
 <body onload="init()">
@@ -35,9 +49,7 @@
         <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
     </center>
 </figure>
-<div>
-    <textarea id="example" rows="8" cols="25"></textarea>
-</div>
+<textarea id="example" rows="8" cols="25"></textarea>
 <canvas id="qtcanvas"></canvas>
 
 

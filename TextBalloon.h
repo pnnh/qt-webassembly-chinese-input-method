@@ -41,10 +41,19 @@ protected:
     int m_nTimerId;
 
 private:
+    void mousePressEvent(QMouseEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event) override;
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+    void showHtmlTextArea();
+
     QString text;
     QString compositionText;
     bool isActive;
     int blinkCount;
+    QPointF cursorPosition;
 };
 
 #endif //QT_WASM_INPUT_METHOD_TEXTBALLOON_H

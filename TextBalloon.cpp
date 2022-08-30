@@ -6,6 +6,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <iostream>
+#include "wasm.h"
 
 std::shared_ptr<TextBalloon> TextBalloon::defaultBalloon = std::make_shared<TextBalloon>(nullptr);
 
@@ -14,8 +15,11 @@ TextBalloon::TextBalloon(QQuickItem *parent)
     std::cout << "TextBalloon" << std::endl;
     TextBalloon::defaultBalloon.reset(this);
 
+    setAcceptedMouseButtons(Qt::LeftButton
+                            | Qt::RightButton
+                            | Qt::MiddleButton);
     // todo 应该点击时才激活，这里是测试目的
-    this->setActive();
+    //this->setActive();
 }
 
 TextBalloon::~TextBalloon() {
@@ -38,6 +42,7 @@ void TextBalloon::setActive() {
 }
 
 void TextBalloon::paint(QPainter *painter) {
+    qDebug() << "TextBalloon::paint: " << this->position();
     QBrush brush(QColor("#FFFFFF"));
 
     painter->setBrush(brush);
@@ -49,20 +54,25 @@ void TextBalloon::paint(QPainter *painter) {
 
     QString fullText = this->text + this->compositionText;
     painter->drawText(this->boundingRect(), Qt::AlignLeft, fullText);
-    if (this->blinkCount % 2 == 0) {
-        auto br = painter->boundingRect(this->boundingRect(), Qt::TextWordWrap, fullText);
-        auto splittedText = fullText.split("\n");
-        if (splittedText.length() < 1)
-            return;
-        auto lastLine = splittedText[splittedText.length() - 1];
-        if (lastLine.isEmpty())
-            lastLine = " ";
-        auto singleLineBr = painter->boundingRect(this->boundingRect(), Qt::TextSingleLine, lastLine);
-        qDebug() << "blink: " << br << "|" << singleLineBr << "|" << lastLine << "|";
 
-        auto xOffset = singleLineBr.width();
-        painter->drawLine(xOffset, br.height() - singleLineBr.height(), xOffset,
-                          br.height());
+    // 计算并绘制光标
+    auto br = painter->boundingRect(this->boundingRect(), Qt::TextWordWrap, fullText);
+    auto splittedText = fullText.split("\n");
+    if (splittedText.length() < 1)
+        return;
+    auto lastLine = splittedText[splittedText.length() - 1];
+    if (lastLine.isEmpty())
+        lastLine = " ";
+    auto singleLineBr = painter->boundingRect(this->boundingRect(), Qt::TextSingleLine, lastLine);
+    qDebug() << "blink: " << br << "|" << singleLineBr << "|" << lastLine << "|";
+
+    auto xOffset = singleLineBr.width();
+    auto yOffset = br.height() - singleLineBr.height();
+    auto thisPosition = this->position();
+    cursorPosition = QPointF(thisPosition.x() + xOffset, thisPosition.y() + yOffset);
+    this->showHtmlTextArea();
+    if (this->blinkCount % 2 == 1) {
+        painter->drawLine(xOffset, yOffset, xOffset, br.height());
     }
 }
 
@@ -102,4 +112,28 @@ void TextBalloon::setCompositionText(QString compositionEvent, QString text) {
     } else
         this->compositionText = "";
     this->update();
+}
+
+void TextBalloon::showHtmlTextArea() {
+    float px = cursorPosition.x();
+    float py = cursorPosition.y();
+    js::showTextArea(px, py);
+}
+
+void TextBalloon::mousePressEvent(QMouseEvent *event) {
+    qDebug() << "CustomItem::mousePressEvent";
+    QQuickPaintedItem::mousePressEvent(event);
+    this->setActive();
+    this->showHtmlTextArea();
+    qDebug() << "cursorPosition: " << cursorPosition;
+}
+
+void TextBalloon::mouseMoveEvent(QMouseEvent *event) {
+    qDebug() << "CustomItem::mouseMoveEvent";
+    QQuickPaintedItem::mouseMoveEvent(event);
+}
+
+void TextBalloon::mouseReleaseEvent(QMouseEvent *event) {
+    qDebug() << "CustomItem::mouseReleaseEvent";
+    QQuickPaintedItem::mouseReleaseEvent(event);
 }
