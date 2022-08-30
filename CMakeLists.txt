@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(qt-wasm-input-method VERSION 0.1 LANGUAGES C CXX)
+project(myapp VERSION 0.1 LANGUAGES C CXX)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -18,29 +18,31 @@ if (CCACHE)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
 endif (CCACHE)
 
-find_package(Qt6 COMPONENTS Core Gui Quick QuickLayouts QuickControls2
-        QuickTemplates2 Network REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Quick QuickLayouts QuickControls2 REQUIRED)
 
-qt_add_executable(qt-wasm-input-method MANUAL_FINALIZATION
-        src/main.cpp)
+qt_add_executable(myapp main.cpp)
 
-target_link_libraries(qt-wasm-input-method
-        PRIVATE Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2 Qt6::Network)
-set_target_properties(qt-wasm-input-method PROPERTIES LINK_FLAGS "--bind")
+target_link_libraries(myapp
+        PRIVATE Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2)
+#set_target_properties(myapp PROPERTIES LINK_FLAGS "--bind")
 
 # 当编译WebAssembly时修改链接参数，否则会报初始内存太小错误
 if (EMSCRIPTEN)
-    set(QT_WASM_INITIAL_MEMORY 96MB)
-    set(QT_WASM_TOTAL_MEMORY 128MB)
+    set(QT_WASM_INITIAL_MEMORY 256MB)
+    set(QT_WASM_TOTAL_MEMORY 256MB)
+    #target_link_options(myapp PRIVATE "-s TOTAL_MEMORY=256MB")
 endif ()
 
-qt_import_qml_plugins(qt-wasm-input-method)
-qt_finalize_executable(qt-wasm-input-method)
+#qt_import_qml_plugins(myapp)
+#qt_finalize_executable(myapp)
 
-qt_add_qml_module(qt-wasm-input-method
-        URI static
+qt6_add_qml_module(myapp
+        URI mymod
         VERSION 1.0
+        SOURCES
+        TextBalloon.h TextBalloon.cpp
+        #mytype.h mytype.cc
         QML_FILES
-        assets/qml/Main.qml
+        main.qml
         RESOURCES
         assets/fonts/NotoSansSC/NotoSansSC-Regular.otf)

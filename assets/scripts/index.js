@@ -15,6 +15,9 @@ clearLog.addEventListener('click', () => {
 
 function handleEvent(event) {
     log.textContent = log.textContent + `${event.type}: ${event.data}\n`;
+    var type = String(event.type)
+    var data = String(event.data)
+    window.moduleConfig.callComposition(type, data)
 }
 
 inputElement.addEventListener('compositionstart', handleEvent);

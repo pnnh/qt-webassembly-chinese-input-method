@@ -42,7 +42,7 @@
     <div class="control">
         <label for="name">On macOS, click in the textbox below,<br> then type <kbd>option</kbd> + <kbd>`</kbd>, then
             <kbd>a</kbd>:</label>
-        <input type="text" id="example" name="example">
+        <input type="text" id="example" style="width: 600px" name="example">
     </div>
 
     <div class="event-log">
@@ -53,35 +53,27 @@
 </div>
 <canvas id="qtcanvas"></canvas>
 
+
 <script type='text/javascript'>
     let qtLoader = undefined;
-
-    window.Module = {};
-
-    Module['onRuntimeInitialized'] = () => {
-        console.log('lerp result: ' + Module.lerp(1, 2, 0.5));
-    }
-    Module.locateFile = function (path, prefix) {
-        console.log('locateFile222', path, prefix)
-        return prefix + path
-    }
     function init() {
         var spinner = document.querySelector('#qtspinner');
         var canvas = document.querySelector('#qtcanvas');
         var status = document.querySelector('#qtstatus')
+
         qtLoader = QtLoader({
-            canvasElements: [canvas],
-            showLoader: function (loaderStatus) {
+            canvasElements : [canvas],
+            showLoader: function(loaderStatus) {
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
                 status.innerHTML = loaderStatus + "...";
             },
-            showError: function (errorText) {
+            showError: function(errorText) {
                 status.innerHTML = errorText;
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
             },
-            showExit: function () {
+            showExit: function() {
                 status.innerHTML = "Application exit";
                 if (qtLoader.exitCode !== undefined)
                     status.innerHTML += " with code " + qtLoader.exitCode;
@@ -90,14 +82,13 @@
                 spinner.style.display = 'block';
                 canvas.style.display = 'none';
             },
-            showCanvas: function () {
+            showCanvas: function() {
                 spinner.style.display = 'none';
                 canvas.style.display = 'block';
             },
         });
-        qtLoader.loadEmscriptenModule("qt-wasm-input-method");
+        qtLoader.loadEmscriptenModule("myapp");
     }
-
 </script>
 <script type="text/javascript" src="/cmake-build-webassembly/qtloader.js"></script>
 <script type="text/javascript" src="/assets/scripts/jquery-3.6.1.min.js"></script>
