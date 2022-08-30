@@ -33,9 +33,18 @@ public:
 
     void insertLineBreak();
 
+    void setActive();
+
+protected:
+    void timerEvent(QTimerEvent *event) override;
+
+    int m_nTimerId;
+
 private:
     QString text;
     QString compositionText;
+    bool isActive;
+    int blinkCount;
 };
 
 #endif //QT_WASM_INPUT_METHOD_TEXTBALLOON_H

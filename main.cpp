@@ -2,20 +2,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QFile>
 #include <string>
 #include <iostream>
 #include "TextBalloon.h"
 
-#include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 #include <emscripten/val.h>
 
 using namespace emscripten;
-
-//EMSCRIPTEN_BINDINGS(my_module) {
-//    emscripten::function("compareBig", &compareBig);
-//}
 
 emscripten::val tryCharPtr() {
     const char *str = "abc哈哈😁☺";

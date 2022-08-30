@@ -6,16 +6,9 @@ $(function () {
 
 
 const inputElement = document.getElementById("example")
-const log = document.querySelector('.event-log-contents');
-const clearLog = document.querySelector('.clear-log');
-
-clearLog.addEventListener('click', () => {
-    log.textContent = '';
-});
 
 function handleEvent(event) {
     console.debug('handleComposition: ', event.type, event.data)
-    log.textContent = log.textContent + `${event.type}: ${event.data}\n`;
     var type = String(event.type)
     var data = String(event.data)
     window.moduleConfig.callCompositionText(type, data)

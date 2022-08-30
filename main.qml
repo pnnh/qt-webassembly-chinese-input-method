@@ -11,17 +11,11 @@ Window {
     title: qsTr("Hello World")
     color: "#F6F6F6"
 
-    TextField {
-        anchors.centerIn: parent
-        width: 400
-        height: 400
-        text:"hello, 世界！"
-    }
     TextBalloon {
-            anchors.right: parent.right
-            height: 620
+            anchors.centerIn: parent
+            height: 600
             text: "hello, 世界！"
-            width: 620
+            width: 600
         }
 }
 
